@@ -1,0 +1,17 @@
+left-translate = 5vw
+right-translate = 75vw
+
+unreveal(t)
+  -webkit-animation: unreveal t /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: unreveal t /* Firefox < 16 */
+  -ms-animation: unreveal t /* Internet Explorer */
+  -o-animation: unreveal t /* Opera < 12.1 */
+  animation: unreveal t
+
+@keyframes unreveal
+  0%
+    opacity: 1
+    transform: translate3d(0, 0, 0)
+  100%
+    opacity: 0
+    transform: translate3d(0, -20px,0)
