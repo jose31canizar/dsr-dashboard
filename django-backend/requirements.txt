@@ -1,0 +1,5 @@
+coverage==4.5.1
+Django==2.0.5
+djangorestframework==3.8.2
+pycodestyle==2.4.0
+pyflakes==2.0.0
