@@ -1,0 +1,3 @@
+[submodule "dsr-statistics-dashboard"]
+	path = dsr-statistics-dashboard
+	url = https://github.com/jose31canizar/dsr-dashboard.git
