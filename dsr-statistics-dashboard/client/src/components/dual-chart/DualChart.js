@@ -5,6 +5,10 @@ import d3 from "d3";
 import { Xaxis, Yaxis, Xgrid, Ygrid, Legend, Title } from "react-d3-core";
 import { Line, Chart, Area, BarGroup } from "react-d3-shape";
 import "./styles.styl";
+
+/*
+Top Two Charts with Selected Fields on the Left and Revenue on Right
+*/
 export default class DualChart extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +39,7 @@ export default class DualChart extends Component {
     let x = date.getFullYear() + "-" + ("0" + nm).slice(-2) + "-01";
     return x;
   }
+  //fields are the selected fields in the filter
   aggregateOn(fields) {
     const { timeScale } = this.props;
     return d3

@@ -3,7 +3,12 @@ import d3 from "d3";
 import { Xaxis, Yaxis, Xgrid, Ygrid, Legend, Title } from "react-d3-core";
 import { BarStackHorizontal, Chart, BarStack } from "react-d3-shape";
 import "./styles.styl";
+
+/*
+Bar Stack Chart
+*/
 export default class DSRBarStack extends Component {
+  //Roll up the different statuses into stacks
   rollUpByStatus(d, obj, field, aggregate) {
     obj[field] = d3.sum(d, function(e) {
       if (e.status === field) {
@@ -13,6 +18,7 @@ export default class DSRBarStack extends Component {
     });
     return obj;
   }
+  //Roll up the different territories into stacks
   rollUpByTerritory(d, obj, field, aggregate) {
     obj[field.name] = d3.sum(d, function(e) {
       if (e.territory === field.id) {
@@ -22,6 +28,9 @@ export default class DSRBarStack extends Component {
     });
     return obj;
   }
+  //groupBy is the x axis
+  //aggregate is the y axis
+  //fields are the different stacks
   aggregateOn(groupBy, aggregate, fields) {
     const { timeScale } = this.props;
     return d3
@@ -71,8 +80,6 @@ export default class DSRBarStack extends Component {
       yLabel
     } = this.props;
     let newData = this.aggregateOn(groupBy, aggregate, fields);
-
-    console.log(newData);
 
     const xScale = "ordinal";
 
@@ -156,6 +163,7 @@ export default class DSRBarStack extends Component {
                 ? territoryName(d, selectedCountries)
                 : statusName(d)
             }
+            xTickFormat={d => d / 1000000 + "M"}
           >
             <BarStackHorizontal
               chartSeries={

@@ -13,6 +13,9 @@ const conversionTable = {
   "21": 0.135
 };
 
+/*
+Home Screen
+*/
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -93,20 +96,27 @@ export default class Home extends Component {
     let x = num * conversionTable[currency];
     return x;
   }
+  //Find all the countries actually used in the data
+  //left join on full DSR table and territories table
   setInitialCountries() {
     const { originalData, allCountries } = this.state;
-    //find all used territories
+    //find all used territories with duplicates
     let initialCountryIndicesWithRepeats = originalData.map(
       (item, i) => item.territory
     );
+    //create a set
     let initialCountryIndices = [...new Set(initialCountryIndicesWithRepeats)];
-    // lookup what countries were used
+    // for each country index, look up that countries name
     let initialCountries = initialCountryIndices.map((ind, i) => {
       let country = allCountries.find(x => x.id === ind);
       return { name: country.name, id: ind };
     });
+    //initialCountries contains the index and the country name so that
+    //filtering the data is possible
+    //so dynamically updating stats and the graphs is possible
     this.setState({ selectedCountries: initialCountries, initialCountries });
   }
+  //choosing a status on the filter menu
   selectStatus(field, status) {
     this.setState(
       (prevState, props) => ({
@@ -117,6 +127,7 @@ export default class Home extends Component {
       () => this.update()
     );
   }
+  //removing a status on the filter menu
   removeStatus(field, status) {
     this.setState(
       (prevState, props) => ({
@@ -125,6 +136,7 @@ export default class Home extends Component {
       () => this.update()
     );
   }
+  //selecting either a country or field
   selectItem(field, option) {
     this.setState(
       (prevState, props) => ({
@@ -137,10 +149,20 @@ export default class Home extends Component {
       () => this.update()
     );
   }
+  //removing either a country or field
+  removeItem(field, index) {
+    this.setState(
+      (prevState, props) => ({
+        [field]: prevState[field].filter((item, i) => i !== index)
+      }),
+      () => this.update()
+    );
+  }
   update() {
     this.updateStats();
     this.updateData();
   }
+  //based on selected countries in the filter menu, calculate the stats
   updateStats() {
     const { originalData, selectedCountries } = this.state;
     let countryIndices = new Set(selectedCountries.map((item, i) => item.id));
@@ -154,6 +176,7 @@ export default class Home extends Component {
     let DSR_COUNT = filteredData.length;
     this.setState({ revenueDisplay: revenue.toFixed(0), DSR_COUNT });
   }
+  //based on selected countries in the filter menu, update the data, keep the original
   updateData() {
     const { originalData, selectedCountries, selectedStatuses } = this.state;
     let countryIndices = new Set(selectedCountries.map((item, i) => item.id));
@@ -162,17 +185,8 @@ export default class Home extends Component {
       .filter((dsr, i) => selectedStatuses.includes(dsr.status));
     this.setState({ data: newData });
   }
-  removeItem(field, index) {
-    this.setState(
-      (prevState, props) => ({
-        [field]: prevState[field].filter((item, i) => i !== index)
-      }),
-      () => this.update()
-    );
-  }
   handleChange(e) {
     let v = e.target.value;
-    console.log(v);
     if (v < 50) {
       this.setState({ timeScaleValue: e.target.value, timeScale: "month" });
     } else {
